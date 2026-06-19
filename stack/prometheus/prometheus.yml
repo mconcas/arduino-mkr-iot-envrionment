@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+
+scrape_configs:
+  - job_name: 'mkr_iot_carrier'
+    static_configs:
+      - targets: ['194.12.165.54:80']
+        labels:
+          device: 'mkr-iot-carrier'
+          location: 'CERN'
+    metrics_path: '/metrics'
+    scrape_timeout: 10s

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m json.tool /Users/nemo/Documents/Arduino/env_mkr_IoT/stack/grafana/provisioning/dashboards/mkr_iot_carrier.json)",
+      "Bash(curl -s http://localhost:9090/api/v1/targets)",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -sv http://194.12.165.54/metrics)"
+    ]
+  }
+}
