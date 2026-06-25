@@ -290,7 +290,7 @@
       "title": "Temperature",
       "description": "Both on-carrier temperature sensors. HTS221 measures ambient humidity+temperature; LPS22HB is the barometric sensor which runs slightly warmer due to self-heating.",
       "type": "timeseries",
-      "gridPos": { "h": 9, "w": 16, "x": 0, "y": 5 },
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 5 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
         "defaults": {
@@ -349,7 +349,7 @@
       "title": "Atmospheric Pressure",
       "description": "Barometric pressure from the LPS22HB sensor. Standard sea-level pressure is 101.325 kPa.",
       "type": "timeseries",
-      "gridPos": { "h": 9, "w": 8, "x": 16, "y": 5 },
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 14 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
         "defaults": {
@@ -408,7 +408,7 @@
       "title": "Illuminance",
       "description": "Light level derived from APDS9960 RGB channels using the Avago application-note formula: lux = -0.32466·R + 1.57837·G - 0.73581·B. Useful for day/night detection and correlating with plant growth.",
       "type": "timeseries",
-      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 14 },
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 23 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
         "defaults": {
@@ -472,7 +472,7 @@
       "title": "Soil Moisture",
       "description": "Resistive sensor on A5. Dry calibration: 1023 ADC (air), wet: 800 ADC (submerged). NaN when pin is floating (sensor disconnected). Drift detection uses two rapid reads; if they differ by >50 ADC counts the sensor is declared absent.",
       "type": "timeseries",
-      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 14 },
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 32 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
         "defaults": {
@@ -546,7 +546,7 @@
       "title": "Wi-Fi Signal Strength",
       "description": "RSSI from the NINA module. > −55 dBm excellent, −55 to −70 dBm good, −70 to −80 dBm acceptable, < −80 dBm poor.",
       "type": "timeseries",
-      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 23 },
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 41 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
         "defaults": {
@@ -611,7 +611,7 @@
       "title": "Sample Age",
       "description": "Time since the last sensor acquisition cycle completed. Sensor interval is 5 s; values above ~10 s indicate the device is stalled or rebooting.",
       "type": "timeseries",
-      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 23 },
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 41 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
         "defaults": {
@@ -675,7 +675,7 @@
       "title": "Acquisition Rate",
       "description": "Sensor acquisition cycles per minute (rate over 2-minute window). Expected ~12 cycles/min at 5 s interval. Drops indicate stalls or reboots.",
       "type": "timeseries",
-      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 23 },
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 41 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
         "defaults": {
