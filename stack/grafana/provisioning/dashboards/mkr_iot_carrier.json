@@ -99,7 +99,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "mkr_iot_carrier_temperature_celsius{sensor=\"hts221\"}",
+          "expr": "(mkr_iot_carrier_temperature_celsius{sensor=\"hts221\"}) + $offset_temperature",
           "legendFormat": "HTS221",
           "refId": "A"
         }
@@ -141,7 +141,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "mkr_iot_carrier_pressure_kilopascals",
+          "expr": "(mkr_iot_carrier_pressure_kilopascals) + $offset_pressure",
           "legendFormat": "Pressure",
           "refId": "A"
         }
@@ -183,7 +183,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "mkr_iot_carrier_illuminance_lux",
+          "expr": "(mkr_iot_carrier_illuminance_lux) + $offset_illuminance",
           "legendFormat": "Illuminance",
           "refId": "A"
         }
@@ -235,7 +235,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "mkr_iot_carrier_soil_moisture_percent",
+          "expr": "(mkr_iot_carrier_soil_moisture_percent) + $offset_soil",
           "instant": true,
           "refId": "A"
         }
@@ -338,7 +338,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "mkr_iot_carrier_temperature_celsius",
+          "expr": "(mkr_iot_carrier_temperature_celsius) + $offset_temperature",
           "legendFormat": "{{sensor}}",
           "refId": "A"
         }
@@ -397,7 +397,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "mkr_iot_carrier_pressure_kilopascals",
+          "expr": "(mkr_iot_carrier_pressure_kilopascals) + $offset_pressure",
           "legendFormat": "Pressure",
           "refId": "A"
         }
@@ -461,7 +461,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "mkr_iot_carrier_illuminance_lux",
+          "expr": "(mkr_iot_carrier_illuminance_lux) + $offset_illuminance",
           "legendFormat": "Illuminance",
           "refId": "A"
         }
@@ -535,7 +535,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "mkr_iot_carrier_soil_moisture_percent",
+          "expr": "(mkr_iot_carrier_soil_moisture_percent) + $offset_soil",
           "legendFormat": "Soil Moisture",
           "refId": "A"
         }
@@ -734,7 +734,54 @@
   "refresh": "30s",
   "schemaVersion": 38,
   "tags": ["arduino", "iot", "mkr", "prometheus"],
-  "templating": { "list": [] },
+  "templating": {
+    "list": [
+      {
+        "name": "offset_temperature",
+        "label": "Temperature offset (°C)",
+        "description": "Manual correction added to all temperature readings. Accepts decimals (0.01 step) and negatives, e.g. -3 or 1.25.",
+        "type": "textbox",
+        "query": "0",
+        "current": { "selected": false, "text": "0", "value": "0" },
+        "options": [{ "selected": true, "text": "0", "value": "0" }],
+        "hide": 0,
+        "skipUrlSync": false
+      },
+      {
+        "name": "offset_pressure",
+        "label": "Pressure offset (kPa)",
+        "description": "Manual correction added to pressure readings. Accepts decimals (0.01 step) and negatives, e.g. -0.5 or 1.20.",
+        "type": "textbox",
+        "query": "0",
+        "current": { "selected": false, "text": "0", "value": "0" },
+        "options": [{ "selected": true, "text": "0", "value": "0" }],
+        "hide": 0,
+        "skipUrlSync": false
+      },
+      {
+        "name": "offset_illuminance",
+        "label": "Illuminance offset (lux)",
+        "description": "Manual correction added to illuminance readings. Accepts decimals (0.01 step) and negatives, e.g. -10 or 25.5.",
+        "type": "textbox",
+        "query": "0",
+        "current": { "selected": false, "text": "0", "value": "0" },
+        "options": [{ "selected": true, "text": "0", "value": "0" }],
+        "hide": 0,
+        "skipUrlSync": false
+      },
+      {
+        "name": "offset_soil",
+        "label": "Soil moisture offset (%)",
+        "description": "Manual correction added to soil moisture readings. Accepts decimals (0.01 step) and negatives, e.g. -2 or 3.75.",
+        "type": "textbox",
+        "query": "0",
+        "current": { "selected": false, "text": "0", "value": "0" },
+        "options": [{ "selected": true, "text": "0", "value": "0" }],
+        "hide": 0,
+        "skipUrlSync": false
+      }
+    ]
+  },
   "time": { "from": "now-24h", "to": "now" },
   "timepicker": {
     "refresh_intervals": ["10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"],
