@@ -99,7 +99,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "(mkr_iot_carrier_temperature_celsius{sensor=\"hts221\"}) + $offset_temperature",
+          "expr": "(mkr_iot_carrier_temperature_celsius{sensor=\"hts221\"}) + ($offset_temperature + 0)",
           "legendFormat": "HTS221",
           "refId": "A"
         }
@@ -141,7 +141,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "(mkr_iot_carrier_pressure_kilopascals) + $offset_pressure",
+          "expr": "(mkr_iot_carrier_pressure_kilopascals) + ($offset_pressure + 0)",
           "legendFormat": "Pressure",
           "refId": "A"
         }
@@ -183,7 +183,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "(mkr_iot_carrier_illuminance_lux) + $offset_illuminance",
+          "expr": "(mkr_iot_carrier_illuminance_lux) + ($offset_illuminance + 0)",
           "legendFormat": "Illuminance",
           "refId": "A"
         }
@@ -235,7 +235,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "(mkr_iot_carrier_soil_moisture_percent) + $offset_soil",
+          "expr": "(mkr_iot_carrier_soil_moisture_percent) + ($offset_soil + 0)",
           "instant": true,
           "refId": "A"
         }
@@ -288,7 +288,7 @@
     {
       "id": 7,
       "title": "Temperature",
-      "description": "Both on-carrier temperature sensors. HTS221 measures ambient humidity+temperature; LPS22HB is the barometric sensor which runs slightly warmer due to self-heating.",
+      "description": "Both on-carrier temperature sensors. HTS221 measures ambient humidity+temperature; LPS22HB is the barometric sensor which runs slightly warmer due to self-heating.\n\nThe dashed 'trend' line is an ordinary least-squares linear regression (Prometheus predict_linear) fitted over the currently selected time range ($__range) and evaluated at each step — so it recomputes when you zoom/pan. Any manual offset is added to the trend as well.",
       "type": "timeseries",
       "gridPos": { "h": 9, "w": 24, "x": 0, "y": 5 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
@@ -324,7 +324,17 @@
             "steps": [{ "color": "green", "value": null }]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*trend.*/" },
+            "properties": [
+              { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [10, 10] } },
+              { "id": "custom.lineWidth", "value": 1 },
+              { "id": "custom.fillOpacity", "value": 0 },
+              { "id": "custom.showPoints", "value": "never" }
+            ]
+          }
+        ]
       },
       "options": {
         "legend": {
@@ -338,16 +348,28 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "(mkr_iot_carrier_temperature_celsius) + $offset_temperature",
+          "expr": "(mkr_iot_carrier_temperature_celsius) + ($offset_temperature + 0)",
           "legendFormat": "{{sensor}}",
           "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "predict_linear(mkr_iot_carrier_temperature_celsius{sensor=\"hts221\"}[$__range], 0) + ($offset_temperature + 0)",
+          "legendFormat": "hts221 trend",
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "predict_linear(mkr_iot_carrier_temperature_celsius{sensor=\"lps22hb\"}[$__range], 0) + ($offset_temperature + 0)",
+          "legendFormat": "lps22hb trend",
+          "refId": "C"
         }
       ]
     },
     {
       "id": 8,
       "title": "Atmospheric Pressure",
-      "description": "Barometric pressure from the LPS22HB sensor. Standard sea-level pressure is 101.325 kPa.",
+      "description": "Barometric pressure from the LPS22HB sensor. Standard sea-level pressure is 101.325 kPa.\n\nThe dashed 'trend' line is an ordinary least-squares linear regression (Prometheus predict_linear) fitted over the currently selected time range ($__range) and evaluated at each step — so it recomputes when you zoom/pan. Any manual offset is added to the trend as well.",
       "type": "timeseries",
       "gridPos": { "h": 9, "w": 24, "x": 0, "y": 14 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
@@ -383,7 +405,17 @@
             "steps": [{ "color": "green", "value": null }]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*trend.*/" },
+            "properties": [
+              { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [10, 10] } },
+              { "id": "custom.lineWidth", "value": 1 },
+              { "id": "custom.fillOpacity", "value": 0 },
+              { "id": "custom.showPoints", "value": "never" }
+            ]
+          }
+        ]
       },
       "options": {
         "legend": {
@@ -397,16 +429,22 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "(mkr_iot_carrier_pressure_kilopascals) + $offset_pressure",
+          "expr": "(mkr_iot_carrier_pressure_kilopascals) + ($offset_pressure + 0)",
           "legendFormat": "Pressure",
           "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "predict_linear(mkr_iot_carrier_pressure_kilopascals[$__range], 0) + ($offset_pressure + 0)",
+          "legendFormat": "Pressure trend",
+          "refId": "B"
         }
       ]
     },
     {
       "id": 9,
       "title": "Illuminance",
-      "description": "Light level derived from APDS9960 RGB channels using the Avago application-note formula: lux = -0.32466·R + 1.57837·G - 0.73581·B. Useful for day/night detection and correlating with plant growth.",
+      "description": "Light level derived from APDS9960 RGB channels using the Avago application-note formula: lux = -0.32466·R + 1.57837·G - 0.73581·B. Useful for day/night detection and correlating with plant growth.\n\nThe dashed 'trend' line is an ordinary least-squares linear regression (Prometheus predict_linear) fitted over the currently selected time range ($__range) and evaluated at each step — so it recomputes when you zoom/pan. Any manual offset is added to the trend as well. Note: a straight line is a poor model for cyclic day/night light, so read this trend as a coarse drift indicator only.",
       "type": "timeseries",
       "gridPos": { "h": 9, "w": 24, "x": 0, "y": 23 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
@@ -447,7 +485,17 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*trend.*/" },
+            "properties": [
+              { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [10, 10] } },
+              { "id": "custom.lineWidth", "value": 1 },
+              { "id": "custom.fillOpacity", "value": 0 },
+              { "id": "custom.showPoints", "value": "never" }
+            ]
+          }
+        ]
       },
       "options": {
         "legend": {
@@ -461,16 +509,22 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "(mkr_iot_carrier_illuminance_lux) + $offset_illuminance",
+          "expr": "(mkr_iot_carrier_illuminance_lux) + ($offset_illuminance + 0)",
           "legendFormat": "Illuminance",
           "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "predict_linear(mkr_iot_carrier_illuminance_lux[$__range], 0) + ($offset_illuminance + 0)",
+          "legendFormat": "Illuminance trend",
+          "refId": "B"
         }
       ]
     },
     {
       "id": 10,
       "title": "Soil Moisture",
-      "description": "Resistive sensor on A5. Dry calibration: 1023 ADC (air), wet: 800 ADC (submerged). NaN when pin is floating (sensor disconnected). Drift detection uses two rapid reads; if they differ by >50 ADC counts the sensor is declared absent.",
+      "description": "Resistive sensor on A5. Dry calibration: 1023 ADC (air), wet: 800 ADC (submerged). NaN when pin is floating (sensor disconnected). Drift detection uses two rapid reads; if they differ by >50 ADC counts the sensor is declared absent.\n\nThe dashed 'trend' line is an ordinary least-squares linear regression (Prometheus predict_linear) fitted over the currently selected time range ($__range) and evaluated at each step — so it recomputes when you zoom/pan. Any manual offset is added to the trend as well.",
       "type": "timeseries",
       "gridPos": { "h": 9, "w": 24, "x": 0, "y": 32 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
@@ -521,7 +575,17 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*trend.*/" },
+            "properties": [
+              { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [10, 10] } },
+              { "id": "custom.lineWidth", "value": 1 },
+              { "id": "custom.fillOpacity", "value": 0 },
+              { "id": "custom.showPoints", "value": "never" }
+            ]
+          }
+        ]
       },
       "options": {
         "legend": {
@@ -535,9 +599,15 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "(mkr_iot_carrier_soil_moisture_percent) + $offset_soil",
+          "expr": "(mkr_iot_carrier_soil_moisture_percent) + ($offset_soil + 0)",
           "legendFormat": "Soil Moisture",
           "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "predict_linear(mkr_iot_carrier_soil_moisture_percent[$__range], 0) + ($offset_soil + 0)",
+          "legendFormat": "Soil Moisture trend",
+          "refId": "B"
         }
       ]
     },
